@@ -1,23 +1,27 @@
+import React from 'react';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
+import Resaux from './test';
+import { Grid } from '@mui/material';
+import Header from './components/Header/Header.component';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const theme = createTheme({
+		palette: {
+			mode: 'light',
+		},
+	});
+	return (
+		<ThemeProvider theme={theme}>
+			<CssBaseline />
+			<Grid container>
+				<Grid item xs={12}>
+					<Header />
+				</Grid>
+			</Grid>
+		</ThemeProvider>
+	);
 }
 
 export default App;
