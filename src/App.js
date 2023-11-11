@@ -2,9 +2,10 @@ import React from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import Resaux from './test';
 import { Grid } from '@mui/material';
 import Header from './components/Header/Header.component';
+import Form from './components/Form/Form.component';
+import Resaux from './components/Simulator/Simulator.component';
 
 function App() {
 	const theme = createTheme({
@@ -18,6 +19,12 @@ function App() {
 			<Grid container>
 				<Grid item xs={12}>
 					<Header />
+				</Grid>
+				<Grid item xs={4}>
+					<Form />
+				</Grid>
+				<Grid item xs={8}>
+					<Resaux />
 				</Grid>
 			</Grid>
 		</ThemeProvider>
