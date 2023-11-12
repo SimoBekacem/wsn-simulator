@@ -22,6 +22,14 @@ export default function Form() {
 					shrink: true,
 				}}
 			/>
+			<TextField
+				id='outlined-number'
+				label='Cluster Heades Number'
+				type='number'
+				InputLabelProps={{
+					shrink: true,
+				}}
+			/>
 		</Stack>
 	);
 }
