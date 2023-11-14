@@ -20,10 +20,10 @@ function generateRandomNetworkFunction(
 
 	//here we creat the edges or the links between the nodes;
 	const edges = [];
-	for (let i = 0; i < numberOfNodes; i++) {
+	for (let i = 0; i < Number(numberOfNodes); i++) {
 		const sourceNode = nodes[i];
 
-		for (let j = 0; j < numberOfNodes; j++) {
+		for (let j = 0; j < Number(numberOfNodes); j++) {
 			const targetNode = nodes[j];
 
 			if (sourceNode !== targetNode) {
@@ -31,7 +31,7 @@ function generateRandomNetworkFunction(
 				const deltaX = sourceNode.position.x - targetNode.position.x;
 				const deltaY = sourceNode.position.y - targetNode.position.y;
 				const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-				if (distance <= sensorCommunicationRange) {
+				if (Number(distance) <= Number(sensorCommunicationRange)) {
 					const edge = {
 						data: {
 							source: sourceNode.data.id,
@@ -48,10 +48,11 @@ function generateRandomNetworkFunction(
 
 	// here we get the cluster heads randomly ;
 	const clusterHeadsList = [];
-	if (clusterHeadsNumber > numberOfNodes) {
+	if (Number(clusterHeadsNumber) > Number(numberOfNodes)) {
 		console.log('this number that you chois is invalid');
 	} else {
-		for (let i = 0; i <= clusterHeadsNumber; i++) {
+		console.log('this number is correct');
+		for (let i = 0; i < clusterHeadsNumber; i++) {
 			const randomClusterHeads = Math.floor(
 				Math.random() * numberOfNodes
 			);
