@@ -23,4 +23,4 @@ const Resaux = () => {
 	);
 };
 
-export default React.memo(Resaux);
+export default Resaux;
