@@ -12,9 +12,10 @@ function generateRandomNetworkFunction(
 			data: {
 				id: `node-${i}`,
 				label: `Node ${i}`,
-				distanceFromClusterHead: null,
 			},
 			position: { x: randomX, y: randomY },
+			distanceFromClusterHead: null,
+			battrieLife: 0,
 		};
 		nodes.push(node);
 	}
@@ -23,7 +24,6 @@ function generateRandomNetworkFunction(
 	if (Number(clusterHeadsNumber) > Number(numberOfNodes)) {
 		console.log('this number that you chois is invalid');
 	} else {
-		console.log('this number is correct');
 		for (let i = 0; i < clusterHeadsNumber; i++) {
 			const randomClusterHeads = Math.floor(
 				Math.random() * numberOfNodes
@@ -55,7 +55,7 @@ function generateRandomNetworkFunction(
 
 					edges.push(edge);
 					if (clusterHeadsList.includes(targetNode.data.id)) {
-						nodes[i].data.distanceFromClusterHead = distance;
+						nodes[i].distanceFromClusterHead = distance;
 					}
 				}
 			}
@@ -70,7 +70,7 @@ function generateRandomNetworkFunction(
 				backgroundColor: `${
 					clusterHeadsList.includes(node.data.id)
 						? 'red'
-						: node.data.distanceFromClusterHead
+						: node.distanceFromClusterHead
 						? 'blue'
 						: 'black'
 				}`,
@@ -102,7 +102,6 @@ function generateRandomNetworkFunction(
 			},
 		};
 	});
-	console.log(nodes);
 
 	return {
 		elements: [...nodes, ...edges],

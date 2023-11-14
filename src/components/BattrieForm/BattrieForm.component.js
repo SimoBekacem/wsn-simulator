@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Stack, TextField, Button } from '@mui/material';
+import { useDispatch } from 'react-redux';
+
+import { changeBattrieLife } from '../../redux/slices/network.reducer';
 
 export default function BattrieForm() {
+	const dispatch = useDispatch();
 	const [values, setvalues] = useState({
-		nodesNumber: 50,
-		communicationRange: 200,
-		clusterHeadsNumber: 20,
+		P: 0.2,
+		r: 0.1,
 	});
+
 	const [info, setinfo] = useState({
-		nodesNumber: 50,
-		communicationRange: 200,
-		clusterHeadsNumber: 20,
+		P: 0.2,
+		r: 0.1,
+	});
+
+	useEffect(() => {
+		dispatch(
+			changeBattrieLife({
+				P: info.P,
+				r: info.r,
+			})
+		);
 	});
 	const hundleChange = (event) => {
 		setvalues({
@@ -21,54 +33,40 @@ export default function BattrieForm() {
 
 	const hundleClick = () => {
 		setinfo({
-			nodesNumber: values.nodesNumber,
-			communicationRange: values.communicationRange,
-			clusterHeadsNumber: values.clusterHeadsNumber,
+			P: values.P,
+			r: values.r,
 		});
 	};
 	return (
 		<Stack spacing={2}>
 			<TextField
 				id='outlined-number'
-				label='E_max'
+				label='probabilité de retransmette'
 				type='number'
-				defaultValue={info.nodesNumber}
+				defaultValue={info.P}
 				onChange={(event) => {
 					hundleChange(event);
 				}}
-				name='E_max'
+				name='P'
 				InputLabelProps={{
 					shrink: true,
 				}}
 			/>
 			<TextField
 				id='outlined-number'
-				label='Cluster head Prosontage'
+				label='taux de perte'
 				type='number'
-				defaultValue={info.communicationRange}
+				defaultValue={info.r}
 				onChange={(event) => {
 					hundleChange(event);
 				}}
-				name='communicationRange'
-				InputLabelProps={{
-					shrink: true,
-				}}
-			/>
-			<TextField
-				id='outlined-number'
-				label='Cluster Heades Number'
-				type='number'
-				onChange={(event) => {
-					hundleChange(event);
-				}}
-				name='clusterHeadsNumber'
-				defaultValue={info.clusterHeadsNumber}
+				name='r'
 				InputLabelProps={{
 					shrink: true,
 				}}
 			/>
 			<Button variant='contained' onClick={hundleClick}>
-				Create The Network
+				Submit
 			</Button>
 		</Stack>
 	);
