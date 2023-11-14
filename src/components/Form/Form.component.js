@@ -2,6 +2,7 @@ import React from 'react';
 import { Stack, Divider } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CreatingNetworkForm from '../CreatingNetworkForm/CreatingNetworkForm.component';
+import BattrieForm from '../BattrieForm/BattrieForm.component';
 import { formStyle } from './Form.style';
 
 const Root = styled('div')(({ theme }) => ({
@@ -18,6 +19,8 @@ export default function Form() {
 			<Root>
 				<Divider>Creating The Network</Divider>
 				<CreatingNetworkForm />
+				<Divider>Battrie Informations</Divider>
+				<BattrieForm />
 			</Root>
 		</Stack>
 	);

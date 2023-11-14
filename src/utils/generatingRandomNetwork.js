@@ -12,12 +12,25 @@ function generateRandomNetworkFunction(
 			data: {
 				id: `node-${i}`,
 				label: `Node ${i}`,
+				distanceFromClusterHead: null,
 			},
 			position: { x: randomX, y: randomY },
 		};
 		nodes.push(node);
 	}
-
+	// here we get the cluster heads randomly ;
+	const clusterHeadsList = [];
+	if (Number(clusterHeadsNumber) > Number(numberOfNodes)) {
+		console.log('this number that you chois is invalid');
+	} else {
+		console.log('this number is correct');
+		for (let i = 0; i < clusterHeadsNumber; i++) {
+			const randomClusterHeads = Math.floor(
+				Math.random() * numberOfNodes
+			);
+			clusterHeadsList.push(nodes[randomClusterHeads].data.id);
+		}
+	}
 	//here we creat the edges or the links between the nodes;
 	const edges = [];
 	for (let i = 0; i < Number(numberOfNodes); i++) {
@@ -41,22 +54,11 @@ function generateRandomNetworkFunction(
 					};
 
 					edges.push(edge);
+					if (clusterHeadsList.includes(targetNode.data.id)) {
+						nodes[i].data.distanceFromClusterHead = distance;
+					}
 				}
 			}
-		}
-	}
-
-	// here we get the cluster heads randomly ;
-	const clusterHeadsList = [];
-	if (Number(clusterHeadsNumber) > Number(numberOfNodes)) {
-		console.log('this number that you chois is invalid');
-	} else {
-		console.log('this number is correct');
-		for (let i = 0; i < clusterHeadsNumber; i++) {
-			const randomClusterHeads = Math.floor(
-				Math.random() * numberOfNodes
-			);
-			clusterHeadsList.push(nodes[randomClusterHeads].data.id);
 		}
 	}
 
@@ -66,7 +68,11 @@ function generateRandomNetworkFunction(
 			selector: `#${node.data.id}`,
 			style: {
 				backgroundColor: `${
-					clusterHeadsList.includes(node.data.id) ? 'red' : 'blue'
+					clusterHeadsList.includes(node.data.id)
+						? 'red'
+						: node.data.distanceFromClusterHead
+						? 'blue'
+						: 'black'
 				}`,
 				label: `${node.data.id} ${
 					clusterHeadsList.includes(node.data.id)
@@ -96,6 +102,7 @@ function generateRandomNetworkFunction(
 			},
 		};
 	});
+	console.log(nodes);
 
 	return {
 		elements: [...nodes, ...edges],
