@@ -1,4 +1,4 @@
-function generateRandomNetwork(
+function generateRandomNetworkFunction(
 	numberOfNodes,
 	sensorCommunicationRange,
 	clusterHeadsNumber
@@ -36,6 +36,7 @@ function generateRandomNetwork(
 						data: {
 							source: sourceNode.data.id,
 							target: targetNode.data.id,
+							id: `${sourceNode.data.id}-${targetNode.data.id}`,
 						},
 					};
 
@@ -44,8 +45,9 @@ function generateRandomNetwork(
 			}
 		}
 	}
-	const clusterHeadsList = [];
 
+	// here we get the cluster heads randomly ;
+	const clusterHeadsList = [];
 	if (clusterHeadsNumber > numberOfNodes) {
 		console.log('this number that you chois is invalid');
 	} else {
@@ -53,11 +55,51 @@ function generateRandomNetwork(
 			const randomClusterHeads = Math.floor(
 				Math.random() * numberOfNodes
 			);
-			clusterHeadsList.push(`#${nodes[randomClusterHeads].data.id}`);
+			clusterHeadsList.push(nodes[randomClusterHeads].data.id);
 		}
 	}
 
-	return { elements: [...nodes, ...edges], clusterHeads: clusterHeadsList };
+	// here we style the cluster header to be in a defferante color
+	const stylesheetNodes = nodes.map((node) => {
+		return {
+			selector: `#${node.data.id}`,
+			style: {
+				backgroundColor: `${
+					clusterHeadsList.includes(node.data.id) ? 'red' : 'blue'
+				}`,
+				label: `${node.data.id} ${
+					clusterHeadsList.includes(node.data.id)
+						? 'cluster Heade'
+						: 'simple'
+				}`,
+			},
+		};
+	});
+	// here we style the edeges that are in link with the cluster headers
+	const stylesheetEdegs = edges.map((edeg) => {
+		return {
+			selector: `#${edeg.data.id}`,
+			style: {
+				width: `${
+					clusterHeadsList.includes(edeg.data.source) ||
+					clusterHeadsList.includes(edeg.data.target)
+						? '5rem'
+						: '1rem'
+				}`,
+				backgroundColor: `${
+					clusterHeadsList.includes(edeg.data.source) ||
+					clusterHeadsList.includes(edeg.data.target)
+						? 'green'
+						: 'black'
+				}`,
+			},
+		};
+	});
+
+	return {
+		elements: [...nodes, ...edges],
+		stylesheet: [...stylesheetNodes, ...stylesheetEdegs],
+	};
 }
 
-export default generateRandomNetwork;
+export default generateRandomNetworkFunction;

@@ -1,20 +1,12 @@
 import React from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
-
-import generateRandomNetwork from '../../utils/generatingRandomNetwork';
+import { useSelector } from 'react-redux';
 
 const Resaux = () => {
-	const network = generateRandomNetwork(90, 150, 20);
+	const network = useSelector((state) => state.network.value);
 	const elements = network.elements;
-	const clusterHeads = network.clusterHeads;
-	const stylesheet = clusterHeads.map((clusterHead) => {
-		return {
-			selector: clusterHead,
-			style: {
-				backgroundColor: 'red',
-			},
-		};
-	});
+	const stylesheet = network.stylesheet;
+
 	return (
 		<CytoscapeComponent
 			elements={elements}
@@ -24,10 +16,11 @@ const Resaux = () => {
 			style={{
 				width: '100%',
 				height: '100%',
+				label: 'center',
 			}}
 			stylesheet={stylesheet}
 		/>
 	);
 };
 
-export default Resaux;
+export default React.memo(Resaux);
