@@ -5,10 +5,6 @@ import { useSelector } from 'react-redux';
 const Resaux = () => {
 	const network = useSelector((state) => state.network.value);
 	const elements = network.elements;
-	console.log(
-		'🚀 ~ file: Simulator.component.js:8 ~ Resaux ~ elements:',
-		elements
-	);
 	const stylesheet = network.stylesheet;
 
 	return (

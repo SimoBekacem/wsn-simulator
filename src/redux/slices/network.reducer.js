@@ -33,8 +33,8 @@ export const networkSlice = createSlice({
 				if (state.value.elements[i].distanceFromClusterHead) {
 					const { P, r } = action.payload;
 					const t = P / (1 - P * (r % (1 / P)));
-					console.log(P, r, t);
 					state.value.elements[i].battrieLife = t;
+					console.log(t);
 				}
 			}
 		},
