@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Stack, TextField, Button } from '@mui/material';
 import { useDispatch } from 'react-redux';
 
-import { changeBattrieLife } from '../../redux/slices/network.reducer';
+// import { changeBattrieLife } from '../../redux/slices/network.reducer';
 
 export default function BattrieForm() {
 	const dispatch = useDispatch();
@@ -16,14 +16,14 @@ export default function BattrieForm() {
 		r: 0.1,
 	});
 
-	useEffect(() => {
-		dispatch(
-			changeBattrieLife({
-				P: info.P,
-				r: info.r,
-			})
-		);
-	});
+	// useEffect(() => {
+	// 	dispatch(
+	// 		changeBattrieLife({
+	// 			P: info.P,
+	// 			r: info.r,
+	// 		})
+	// 	);
+	// });
 	const hundleChange = (event) => {
 		setvalues({
 			...values,

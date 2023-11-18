@@ -2,31 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Stack, TextField, Button } from '@mui/material';
 
-import { generateRandomNetwork } from '../../redux/slices/network.reducer';
+import {
+	generateNodesRedux,
+	generateClusterHeadsAndLinksRedux,
+} from '../../redux/slices/network.reducer';
 
 export default function CreatingNetworkForm() {
 	const dispatch = useDispatch();
+	const [numberOfNodes, setnumberOfNodes] = useState(40);
 	const [values, setvalues] = useState({
-		nodesNumber: 8,
 		communicationRange: 200,
-		clusterHeadsNumber: 4,
+		clusterHeadsNumber: 20,
 	});
 	const [info, setinfo] = useState({
-		nodesNumber: 8,
 		communicationRange: 200,
-		clusterHeadsNumber: 5,
+		clusterHeadsNumber: 20,
 	});
 
 	useEffect(() => {
 		dispatch(
-			generateRandomNetwork({
-				numberOfNodes: info.nodesNumber,
-				sensorCommunicationRange: info.communicationRange,
-				clusterHeadsNumber: info.clusterHeadsNumber,
+			generateNodesRedux({
+				numberOfNodes,
 			})
 		);
-	}, [info]);
+	}, [numberOfNodes]);
 
+	const hundleChangeNumberOfNodes = (event) => {
+		setnumberOfNodes(event.target.value);
+	};
 	const hundleChange = (event) => {
 		setvalues({
 			...values,
@@ -40,6 +43,13 @@ export default function CreatingNetworkForm() {
 			communicationRange: values.communicationRange,
 			clusterHeadsNumber: values.clusterHeadsNumber,
 		});
+		dispatch(
+			generateClusterHeadsAndLinksRedux({
+				sensorCommunicationRange: info.communicationRange,
+				clusterHeadsNumber: info.clusterHeadsNumber,
+				formula: 0,
+			})
+		);
 	};
 
 	return (
@@ -48,9 +58,9 @@ export default function CreatingNetworkForm() {
 				id='outlined-number'
 				label='Nodes Number'
 				type='number'
-				defaultValue={info.nodesNumber}
+				defaultValue={numberOfNodes}
 				onChange={(event) => {
-					hundleChange(event);
+					hundleChangeNumberOfNodes(event);
 				}}
 				name='nodesNumber'
 				InputLabelProps={{

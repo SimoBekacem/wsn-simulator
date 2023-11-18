@@ -1,8 +1,4 @@
-function generateRandomNetworkFunction(
-	numberOfNodes,
-	sensorCommunicationRange,
-	clusterHeadsNumber
-) {
+function generateNodes(numberOfNodes) {
 	//here we creat the nodes :
 	const nodes = [];
 	for (let i = 0; i < numberOfNodes; i++) {
@@ -22,6 +18,16 @@ function generateRandomNetworkFunction(
 		};
 		nodes.push(node);
 	}
+	return nodes;
+}
+
+function generateClusterHeadsAndLinks(
+	nodes,
+	sensorCommunicationRange,
+	clusterHeadsNumber,
+	formula
+) {
+	const numberOfNodes = nodes.length;
 	// here we get the cluster heads randomly ;
 	const clusterHeadsList = [];
 	if (Number(clusterHeadsNumber) > Number(numberOfNodes)) {
@@ -32,6 +38,7 @@ function generateRandomNetworkFunction(
 				Math.random() * numberOfNodes
 			);
 			nodes[randomClusterHeads].isClusterHead = true;
+			nodes[randomClusterHeads].numberIsNotCluster = 0;
 			clusterHeadsList.push(nodes[randomClusterHeads]);
 		}
 	}
@@ -67,7 +74,6 @@ function generateRandomNetworkFunction(
 	const edges = [];
 	for (let i = 0; i < numberOfNodes; i++) {
 		const sourceNode = nodes[i];
-		let targetNode = null;
 		let clusterNode = clusterHeadsList[0];
 		let infoTargetSource = calculateDistanc(sourceNode, clusterNode);
 		for (let j = 1; j < clusterHeadsList.length; j++) {
@@ -82,6 +88,7 @@ function generateRandomNetworkFunction(
 		}
 		if (sourceNode !== infoTargetSource.targetNode) {
 			creatingLink(sourceNode, infoTargetSource.targetNode, i);
+			sourceNode.numberIsNotCluster++;
 			sourceNode.hasClusterHead = true;
 		}
 	}
@@ -104,20 +111,11 @@ function generateRandomNetworkFunction(
 			},
 		};
 	});
-	// here we style the edeges that are in link with the cluster headers
-	const stylesheetEdegs = edges.map((edeg) => {
-		return {
-			selector: `#${edeg.data.id}`,
-			style: {
-				width: `5rem`,
-			},
-		};
-	});
-
 	return {
-		elements: [...nodes, ...edges],
-		stylesheet: [...stylesheetNodes, ...stylesheetEdegs],
+		nodes,
+		edges,
+		stylesheetNodes,
 	};
 }
 
-export default generateRandomNetworkFunction;
+export { generateNodes, generateClusterHeadsAndLinks };
