@@ -18,6 +18,7 @@ function generateRandomNetworkFunction(
 			isClusterHead: false,
 			hasClusterHead: false,
 			battrieLife: 0,
+			numberIsNotCluster: 0,
 		};
 		nodes.push(node);
 	}
@@ -34,12 +35,19 @@ function generateRandomNetworkFunction(
 			clusterHeadsList.push(nodes[randomClusterHeads]);
 		}
 	}
-	//here we creat the edges or the links between the nodes;
-	const creatingLink = (sourceNode, targetNode, i) => {
+
+	// this function calculate the distance between two nodes
+	const calculateDistanc = (sourceNode, targetNode) => {
 		//: here we have the cordonnations of each point and we calculate the distance between those 2 points
 		const deltaX = sourceNode.position.x - targetNode.position.x;
 		const deltaY = sourceNode.position.y - targetNode.position.y;
 		const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+		return { distance, targetNode };
+	};
+
+	//here we creat the edges or the links between the nodes;
+	const creatingLink = (sourceNode, targetNode, i) => {
+		const distance = calculateDistanc(sourceNode, targetNode).distance;
 		if (distance <= sensorCommunicationRange) {
 			const edge = {
 				data: {
@@ -55,15 +63,26 @@ function generateRandomNetworkFunction(
 			}
 		}
 	};
-	console.log(clusterHeadsList);
+
 	const edges = [];
 	for (let i = 0; i < numberOfNodes; i++) {
 		const sourceNode = nodes[i];
-		for (let j = 0; j < clusterHeadsList.length; j++) {
+		let targetNode = null;
+		let clusterNode = clusterHeadsList[0];
+		let infoTargetSource = calculateDistanc(sourceNode, clusterNode);
+		for (let j = 1; j < clusterHeadsList.length; j++) {
 			const targetNode = clusterHeadsList[j];
-			if (sourceNode !== targetNode) {
-				creatingLink(sourceNode, targetNode, i);
+			const newInfoTargetSource = calculateDistanc(
+				sourceNode,
+				targetNode
+			);
+			if (infoTargetSource.distance >= newInfoTargetSource.distance) {
+				infoTargetSource = newInfoTargetSource;
 			}
+		}
+		if (sourceNode !== infoTargetSource.targetNode) {
+			creatingLink(sourceNode, infoTargetSource.targetNode, i);
+			sourceNode.hasClusterHead = true;
 		}
 	}
 
