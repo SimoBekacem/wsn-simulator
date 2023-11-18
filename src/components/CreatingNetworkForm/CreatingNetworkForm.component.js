@@ -11,12 +11,12 @@ export default function CreatingNetworkForm() {
 	const dispatch = useDispatch();
 	const [numberOfNodes, setnumberOfNodes] = useState(40);
 	const [values, setvalues] = useState({
-		communicationRange: 200,
-		clusterHeadsNumber: 20,
+		communicationRange: 0,
+		clusterHeadsNumber: 0,
 	});
 	const [info, setinfo] = useState({
-		communicationRange: 200,
-		clusterHeadsNumber: 20,
+		communicationRange: 0,
+		clusterHeadsNumber: 0,
 	});
 
 	useEffect(() => {
@@ -30,6 +30,7 @@ export default function CreatingNetworkForm() {
 	const hundleChangeNumberOfNodes = (event) => {
 		setnumberOfNodes(event.target.value);
 	};
+	//todo: here ther is a problem you should to solve the decalage between the type and the affichage
 	const hundleChange = (event) => {
 		setvalues({
 			...values,
@@ -39,10 +40,10 @@ export default function CreatingNetworkForm() {
 
 	const hundleClick = () => {
 		setinfo({
-			nodesNumber: values.nodesNumber,
 			communicationRange: values.communicationRange,
 			clusterHeadsNumber: values.clusterHeadsNumber,
 		});
+
 		dispatch(
 			generateClusterHeadsAndLinksRedux({
 				sensorCommunicationRange: info.communicationRange,

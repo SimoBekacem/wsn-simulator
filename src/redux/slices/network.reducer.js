@@ -27,15 +27,17 @@ export const networkSlice = createSlice({
 		generateClusterHeadsAndLinksRedux: (state, action) => {
 			const { sensorCommunicationRange, clusterHeadsNumber, formula } =
 				action.payload;
-			const oldNodes = state.value.nodes;
-			const { nodes, edges, stylesheetNodes } =
-				generateClusterHeadsAndLinks(
-					oldNodes,
-					sensorCommunicationRange,
-					clusterHeadsNumber
-				);
-			state.value.stylesheet = [...stylesheetNodes];
-			state.value.elements = [...nodes, ...edges];
+			if (sensorCommunicationRange !== 0 && clusterHeadsNumber !== 0) {
+				const oldNodes = state.value.nodes;
+				const { nodes, edges, stylesheetNodes } =
+					generateClusterHeadsAndLinks(
+						oldNodes,
+						sensorCommunicationRange,
+						clusterHeadsNumber
+					);
+				state.value.stylesheet = [...stylesheetNodes];
+				state.value.elements = [...nodes, ...edges];
+			}
 		},
 	},
 });

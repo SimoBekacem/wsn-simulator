@@ -92,6 +92,15 @@ function generateClusterHeadsAndLinks(
 			sourceNode.hasClusterHead = true;
 		}
 	}
+	for (let j = 0; j < clusterHeadsList.length; j++) {
+		const sourceClusterNode = clusterHeadsList[j];
+		for (let i = 0; i < clusterHeadsList.length; i++) {
+			const targetClusterNode = clusterHeadsList[i];
+			if (sourceClusterNode !== targetClusterNode) {
+				creatingLink(sourceClusterNode, targetClusterNode, j);
+			}
+		}
+	}
 
 	// here we style the cluster header to be in a defferante color
 	const stylesheetNodes = nodes.map((node) => {

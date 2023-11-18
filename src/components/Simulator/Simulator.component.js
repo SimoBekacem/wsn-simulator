@@ -13,6 +13,7 @@ const Resaux = () => {
 		setElements([...network.elements]);
 		setForceUpdate((prev) => !prev);
 	}, [network.elements]);
+
 	return (
 		<CytoscapeComponent
 			key={forceUpdate}
