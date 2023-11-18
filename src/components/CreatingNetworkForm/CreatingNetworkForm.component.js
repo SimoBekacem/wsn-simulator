@@ -7,14 +7,14 @@ import { generateRandomNetwork } from '../../redux/slices/network.reducer';
 export default function CreatingNetworkForm() {
 	const dispatch = useDispatch();
 	const [values, setvalues] = useState({
-		nodesNumber: 50,
+		nodesNumber: 8,
 		communicationRange: 200,
-		clusterHeadsNumber: 20,
+		clusterHeadsNumber: 4,
 	});
 	const [info, setinfo] = useState({
-		nodesNumber: 50,
+		nodesNumber: 8,
 		communicationRange: 200,
-		clusterHeadsNumber: 20,
+		clusterHeadsNumber: 5,
 	});
 
 	useEffect(() => {
@@ -25,7 +25,7 @@ export default function CreatingNetworkForm() {
 				clusterHeadsNumber: info.clusterHeadsNumber,
 			})
 		);
-	});
+	}, [info]);
 
 	const hundleChange = (event) => {
 		setvalues({

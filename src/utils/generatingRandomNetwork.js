@@ -6,8 +6,8 @@ function generateRandomNetworkFunction(
 	//here we creat the nodes :
 	const nodes = [];
 	for (let i = 0; i < numberOfNodes; i++) {
-		const randomX = Math.floor(Math.random() * 900 + 100);
-		const randomY = Math.floor(Math.random() * 700 + 100);
+		const randomX = Math.floor(Math.random() * 1000 + 30);
+		const randomY = Math.floor(Math.random() * 800 + 30);
 		const node = {
 			data: {
 				id: `node-${i}`,
@@ -15,6 +15,8 @@ function generateRandomNetworkFunction(
 			},
 			position: { x: randomX, y: randomY },
 			distanceFromClusterHead: null,
+			isClusterHead: false,
+			hasClusterHead: false,
 			battrieLife: 0,
 		};
 		nodes.push(node);
@@ -28,36 +30,39 @@ function generateRandomNetworkFunction(
 			const randomClusterHeads = Math.floor(
 				Math.random() * numberOfNodes
 			);
-			clusterHeadsList.push(nodes[randomClusterHeads].data.id);
+			nodes[randomClusterHeads].isClusterHead = true;
+			clusterHeadsList.push(nodes[randomClusterHeads]);
 		}
 	}
 	//here we creat the edges or the links between the nodes;
+	const creatingLink = (sourceNode, targetNode, i) => {
+		//: here we have the cordonnations of each point and we calculate the distance between those 2 points
+		const deltaX = sourceNode.position.x - targetNode.position.x;
+		const deltaY = sourceNode.position.y - targetNode.position.y;
+		const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+		if (distance <= sensorCommunicationRange) {
+			const edge = {
+				data: {
+					source: sourceNode.data.id,
+					target: targetNode.data.id,
+					id: `${sourceNode.data.id}-${targetNode.data.id}`,
+				},
+			};
+
+			edges.push(edge);
+			if (clusterHeadsList.includes(targetNode)) {
+				nodes[i].distanceFromClusterHead = distance;
+			}
+		}
+	};
+	console.log(clusterHeadsList);
 	const edges = [];
-	for (let i = 0; i < Number(numberOfNodes); i++) {
+	for (let i = 0; i < numberOfNodes; i++) {
 		const sourceNode = nodes[i];
-
-		for (let j = 0; j < Number(numberOfNodes); j++) {
-			const targetNode = nodes[j];
-
+		for (let j = 0; j < clusterHeadsList.length; j++) {
+			const targetNode = clusterHeadsList[j];
 			if (sourceNode !== targetNode) {
-				//: here we have the cordonnations of each point and we calculate the distance between those 2 points
-				const deltaX = sourceNode.position.x - targetNode.position.x;
-				const deltaY = sourceNode.position.y - targetNode.position.y;
-				const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-				if (Number(distance) <= Number(sensorCommunicationRange)) {
-					const edge = {
-						data: {
-							source: sourceNode.data.id,
-							target: targetNode.data.id,
-							id: `${sourceNode.data.id}-${targetNode.data.id}`,
-						},
-					};
-
-					edges.push(edge);
-					if (clusterHeadsList.includes(targetNode.data.id)) {
-						nodes[i].distanceFromClusterHead = distance;
-					}
-				}
+				creatingLink(sourceNode, targetNode, i);
 			}
 		}
 	}
@@ -68,16 +73,14 @@ function generateRandomNetworkFunction(
 			selector: `#${node.data.id}`,
 			style: {
 				backgroundColor: `${
-					clusterHeadsList.includes(node.data.id)
+					node.isClusterHead
 						? 'red'
 						: node.distanceFromClusterHead
 						? 'blue'
 						: 'black'
 				}`,
 				label: `${node.data.id} ${
-					clusterHeadsList.includes(node.data.id)
-						? 'cluster Heade'
-						: 'simple'
+					clusterHeadsList.includes(node) ? 'cluster Heade' : 'simple'
 				}`,
 			},
 		};
@@ -87,18 +90,7 @@ function generateRandomNetworkFunction(
 		return {
 			selector: `#${edeg.data.id}`,
 			style: {
-				width: `${
-					clusterHeadsList.includes(edeg.data.source) ||
-					clusterHeadsList.includes(edeg.data.target)
-						? '5rem'
-						: '1rem'
-				}`,
-				backgroundColor: `${
-					clusterHeadsList.includes(edeg.data.source) ||
-					clusterHeadsList.includes(edeg.data.target)
-						? 'green'
-						: 'black'
-				}`,
+				width: `5rem`,
 			},
 		};
 	});

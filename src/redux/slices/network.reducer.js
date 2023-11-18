@@ -24,6 +24,7 @@ export const networkSlice = createSlice({
 				sensorCommunicationRange,
 				clusterHeadsNumber
 			);
+			console.log(network.elements);
 			state.value.elements = network.elements;
 			state.value.stylesheet = network.stylesheet;
 			state.value.nodeNumber = numberOfNodes;

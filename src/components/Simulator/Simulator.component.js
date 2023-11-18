@@ -1,22 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import CytoscapeComponent from 'react-cytoscapejs';
 import { useSelector } from 'react-redux';
 
 const Resaux = () => {
 	const network = useSelector((state) => state.network.value);
-	const elements = network.elements;
+	const originalElements = network.elements;
+	const [elements, setElements] = useState([...originalElements]);
 	const stylesheet = network.stylesheet;
+	const [forceUpdate, setForceUpdate] = useState(false);
 
+	useEffect(() => {
+		setElements([...network.elements]);
+		setForceUpdate((prev) => !prev);
+	}, [network.elements]);
+	console.log(elements);
 	return (
 		<CytoscapeComponent
-			elements={elements}
+			key={forceUpdate}
+			elements={[...elements]}
 			zoomingEnabled={false}
 			autolock={true}
 			zoom={0.75}
 			style={{
 				width: '100%',
 				height: '100%',
-				label: 'center',
 			}}
 			stylesheet={stylesheet}
 		/>
