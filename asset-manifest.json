@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.js": "/wsn-simulator/static/js/main.73fe09c8.js",
+    "static/media/Screenshot 2023-11-19 at 12.01.29.png": "/wsn-simulator/static/media/Screenshot 2023-11-19 at 12.01.29.7b096706b47b98455fe2.png",
+    "static/media/Screenshot 2023-11-19 at 12.01.17.png": "/wsn-simulator/static/media/Screenshot 2023-11-19 at 12.01.17.089d017bd948ebc4d0d3.png",
+    "static/media/Screenshot 2023-11-19 at 12.01.22.png": "/wsn-simulator/static/media/Screenshot 2023-11-19 at 12.01.22.57dfedbfeb2145ac78b4.png",
+    "index.html": "/wsn-simulator/index.html",
+    "main.73fe09c8.js.map": "/wsn-simulator/static/js/main.73fe09c8.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.73fe09c8.js"
+  ]
+}
