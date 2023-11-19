@@ -6,6 +6,10 @@ const Resaux = () => {
 	const network = useSelector((state) => state.network.value);
 	const originalElements = network.elements;
 	const [elements, setElements] = useState([...originalElements]);
+	console.log(
+		'🚀 ~ file: Simulator.component.js:9 ~ Resaux ~ elements:',
+		elements
+	);
 	const stylesheet = network.stylesheet;
 	const [forceUpdate, setForceUpdate] = useState(false);
 

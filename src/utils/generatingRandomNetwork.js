@@ -15,6 +15,7 @@ function generateNodes(numberOfNodes) {
 			hasClusterHead: false,
 			battrieLife: 0,
 			numberIsNotCluster: 0,
+			clusterhead: null,
 		};
 		nodes.push(node);
 	}
@@ -33,10 +34,13 @@ function generateClusterHeadsAndLinks(
 	if (Number(clusterHeadsNumber) > Number(numberOfNodes)) {
 		console.log('this number that you chois is invalid');
 	} else {
+		const selectedIndices = new Set(); // To keep track of selected indices
 		for (let i = 0; i < clusterHeadsNumber; i++) {
-			const randomClusterHeads = Math.floor(
-				Math.random() * numberOfNodes
-			);
+			let randomClusterHeads;
+			do {
+				randomClusterHeads = Math.floor(Math.random() * numberOfNodes);
+			} while (selectedIndices.has(randomClusterHeads));
+			selectedIndices.add(randomClusterHeads);
 			nodes[randomClusterHeads].isClusterHead = true;
 			nodes[randomClusterHeads].numberIsNotCluster = 0;
 			clusterHeadsList.push(nodes[randomClusterHeads]);
@@ -67,6 +71,7 @@ function generateClusterHeadsAndLinks(
 			edges.push(edge);
 			if (clusterHeadsList.includes(targetNode)) {
 				nodes[i].distanceFromClusterHead = distance;
+				nodes[i].clusterhead = targetNode.data.id;
 			}
 		}
 	};
@@ -96,13 +101,37 @@ function generateClusterHeadsAndLinks(
 		const sourceClusterNode = clusterHeadsList[j];
 		for (let i = 0; i < clusterHeadsList.length; i++) {
 			const targetClusterNode = clusterHeadsList[i];
-			if (sourceClusterNode !== targetClusterNode) {
-				creatingLink(sourceClusterNode, targetClusterNode, j);
+			const distance = calculateDistanc(
+				sourceClusterNode,
+				targetClusterNode
+			).distance;
+			if (
+				sourceClusterNode !== targetClusterNode &&
+				distance <= sensorCommunicationRange
+			) {
+				const edge = {
+					data: {
+						source: sourceClusterNode.data.id,
+						target: targetClusterNode.data.id,
+						id: `${sourceClusterNode.data.id}-${targetClusterNode.data.id}`,
+					},
+				};
+
+				edges.push(edge);
 			}
 		}
 	}
 
 	// here we style the cluster header to be in a defferante color
+	const stylesheetNodes = styleNodes(nodes, clusterHeadsList);
+	return {
+		nodes,
+		edges,
+		stylesheetNodes,
+	};
+}
+
+function styleNodes(nodes, clusterHeadsList) {
 	const stylesheetNodes = nodes.map((node) => {
 		return {
 			selector: `#${node.data.id}`,
@@ -120,11 +149,7 @@ function generateClusterHeadsAndLinks(
 			},
 		};
 	});
-	return {
-		nodes,
-		edges,
-		stylesheetNodes,
-	};
+	return stylesheetNodes;
 }
 
 export { generateNodes, generateClusterHeadsAndLinks };
