@@ -13,7 +13,7 @@ function generateNodes(numberOfNodes) {
 			distanceFromClusterHead: null,
 			isClusterHead: false,
 			hasClusterHead: false,
-			battrieLife: 0,
+			battrieLife: 100,
 			numberIsNotCluster: 0,
 			clusterhead: null,
 		};
@@ -25,10 +25,19 @@ function generateNodes(numberOfNodes) {
 function generateClusterHeadsAndLinks(
 	nodes,
 	sensorCommunicationRange,
-	clusterHeadsNumber,
+	clusterHeadsPorsentag,
 	isRelection
 ) {
-	const numberOfNodes = nodes.length;
+	let numberOfNodes = 0;
+	for (let i = 0; i < nodes.length; i++) {
+		if (nodes[i].battrieLife > 0) {
+			numberOfNodes++;
+		}
+	}
+	console.log(numberOfNodes);
+	const clusterHeadsNumber = Math.floor(
+		(clusterHeadsPorsentag * numberOfNodes) / 100
+	);
 	// here we get the cluster heads randomly ;
 	const clusterHeadsList = [];
 	if (!isRelection) {
@@ -67,6 +76,7 @@ function generateClusterHeadsAndLinks(
 			do {
 				randomClusterHeads = Math.floor(Math.random() * numberOfNodes);
 			} while (
+				nodes[randomClusterHeads].battrieLife >= 35 &&
 				selectedIndices.has(randomClusterHeads) &&
 				wasClusterHeade.includes(nodes[randomClusterHeads].data.id)
 			);
@@ -109,22 +119,24 @@ function generateClusterHeadsAndLinks(
 	const edges = [];
 	for (let i = 0; i < numberOfNodes; i++) {
 		const sourceNode = nodes[i];
-		let clusterNode = clusterHeadsList[0];
-		let infoTargetSource = calculateDistanc(sourceNode, clusterNode);
-		for (let j = 1; j < clusterHeadsList.length; j++) {
-			const targetNode = clusterHeadsList[j];
-			const newInfoTargetSource = calculateDistanc(
-				sourceNode,
-				targetNode
-			);
-			if (infoTargetSource.distance >= newInfoTargetSource.distance) {
-				infoTargetSource = newInfoTargetSource;
+		if (sourceNode.battrieLife > 0) {
+			let clusterNode = clusterHeadsList[0];
+			let infoTargetSource = calculateDistanc(sourceNode, clusterNode);
+			for (let j = 1; j < clusterHeadsList.length; j++) {
+				const targetNode = clusterHeadsList[j];
+				const newInfoTargetSource = calculateDistanc(
+					sourceNode,
+					targetNode
+				);
+				if (infoTargetSource.distance >= newInfoTargetSource.distance) {
+					infoTargetSource = newInfoTargetSource;
+				}
 			}
-		}
-		if (sourceNode !== infoTargetSource.targetNode) {
-			creatingLink(sourceNode, infoTargetSource.targetNode, i);
-			sourceNode.numberIsNotCluster++;
-			sourceNode.hasClusterHead = true;
+			if (sourceNode !== infoTargetSource.targetNode) {
+				creatingLink(sourceNode, infoTargetSource.targetNode, i);
+				sourceNode.numberIsNotCluster++;
+				sourceNode.hasClusterHead = true;
+			}
 		}
 	}
 	for (let j = 0; j < clusterHeadsList.length; j++) {
@@ -161,6 +173,19 @@ function generateClusterHeadsAndLinks(
 	};
 }
 
+function decresingBattrieLife(nodes) {
+	nodes.map((node) => {
+		if (node.battrieLife >= 35) {
+			node.isClusterHead
+				? (node.battrieLife -= 25)
+				: (node.battrieLife -= 15);
+		} else {
+			node.battrieLife = 0;
+		}
+	});
+	return nodes;
+}
+
 function styleNodes(nodes, clusterHeadsList) {
 	const stylesheetNodes = nodes.map((node) => {
 		return {
@@ -170,6 +195,8 @@ function styleNodes(nodes, clusterHeadsList) {
 					node.isClusterHead
 						? 'red'
 						: node.distanceFromClusterHead
+						? 'green'
+						: node.battrieLife
 						? 'blue'
 						: 'black'
 				}`,
@@ -182,4 +209,4 @@ function styleNodes(nodes, clusterHeadsList) {
 	return stylesheetNodes;
 }
 
-export { generateNodes, generateClusterHeadsAndLinks };
+export { generateNodes, generateClusterHeadsAndLinks, decresingBattrieLife };

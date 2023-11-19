@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
 	generateNodes,
 	generateClusterHeadsAndLinks,
+	decresingBattrieLife,
 } from '../../utils/generatingRandomNetwork';
 
 const initialState = {
@@ -10,6 +11,7 @@ const initialState = {
 		nodes: [],
 		stylesheet: [],
 		nodeNumber: null,
+		round: 0,
 	},
 };
 
@@ -38,8 +40,10 @@ export const networkSlice = createSlice({
 				state.value.stylesheet = [...stylesheetNodes];
 				state.value.elements = [...nodes, ...edges];
 			}
+			state.value.round++;
 		},
 		relectionClusterHeadsAndLinksRedux: (state, action) => {
+			state.value.nodes = decresingBattrieLife(state.value.nodes);
 			const { sensorCommunicationRange, clusterHeadsNumber } =
 				action.payload;
 			if (sensorCommunicationRange !== 0 && clusterHeadsNumber !== 0) {
@@ -55,6 +59,7 @@ export const networkSlice = createSlice({
 				state.value.stylesheet = [...stylesheetNodes];
 				state.value.elements = [...nodes, ...edges];
 			}
+			state.value.round++;
 		},
 	},
 });
