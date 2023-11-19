@@ -25,7 +25,7 @@ export const networkSlice = createSlice({
 			state.value.nodeNumber = numberOfNodes;
 		},
 		generateClusterHeadsAndLinksRedux: (state, action) => {
-			const { sensorCommunicationRange, clusterHeadsNumber, formula } =
+			const { sensorCommunicationRange, clusterHeadsNumber } =
 				action.payload;
 			if (sensorCommunicationRange !== 0 && clusterHeadsNumber !== 0) {
 				const oldNodes = state.value.nodes;
@@ -39,11 +39,31 @@ export const networkSlice = createSlice({
 				state.value.elements = [...nodes, ...edges];
 			}
 		},
+		relectionClusterHeadsAndLinksRedux: (state, action) => {
+			const { sensorCommunicationRange, clusterHeadsNumber } =
+				action.payload;
+			if (sensorCommunicationRange !== 0 && clusterHeadsNumber !== 0) {
+				const oldNodes = state.value.nodes;
+				const isRelection = true;
+				const { nodes, edges, stylesheetNodes } =
+					generateClusterHeadsAndLinks(
+						oldNodes,
+						sensorCommunicationRange,
+						clusterHeadsNumber,
+						isRelection
+					);
+				state.value.stylesheet = [...stylesheetNodes];
+				state.value.elements = [...nodes, ...edges];
+			}
+		},
 	},
 });
 
 // Action creators are generated for each case reducer function
-export const { generateNodesRedux, generateClusterHeadsAndLinksRedux } =
-	networkSlice.actions;
+export const {
+	generateNodesRedux,
+	generateClusterHeadsAndLinksRedux,
+	relectionClusterHeadsAndLinksRedux,
+} = networkSlice.actions;
 
 export default networkSlice.reducer;

@@ -5,6 +5,7 @@ import { Stack, TextField, Button } from '@mui/material';
 import {
 	generateNodesRedux,
 	generateClusterHeadsAndLinksRedux,
+	relectionClusterHeadsAndLinksRedux,
 } from '../../redux/slices/network.reducer';
 
 export default function CreatingNetworkForm() {
@@ -46,6 +47,15 @@ export default function CreatingNetworkForm() {
 
 		dispatch(
 			generateClusterHeadsAndLinksRedux({
+				sensorCommunicationRange: info.communicationRange,
+				clusterHeadsNumber: info.clusterHeadsNumber,
+				formula: 0,
+			})
+		);
+	};
+	const hundleClick1 = () => {
+		dispatch(
+			relectionClusterHeadsAndLinksRedux({
 				sensorCommunicationRange: info.communicationRange,
 				clusterHeadsNumber: info.clusterHeadsNumber,
 				formula: 0,
@@ -96,6 +106,9 @@ export default function CreatingNetworkForm() {
 			/>
 			<Button variant='contained' onClick={hundleClick}>
 				Create The Network
+			</Button>
+			<Button variant='contained' onClick={hundleClick1}>
+				Move To Next Election
 			</Button>
 		</Stack>
 	);

@@ -26,20 +26,50 @@ function generateClusterHeadsAndLinks(
 	nodes,
 	sensorCommunicationRange,
 	clusterHeadsNumber,
-	formula
+	isRelection
 ) {
 	const numberOfNodes = nodes.length;
 	// here we get the cluster heads randomly ;
 	const clusterHeadsList = [];
-	if (Number(clusterHeadsNumber) > Number(numberOfNodes)) {
-		console.log('this number that you chois is invalid');
+	if (!isRelection) {
+		if (Number(clusterHeadsNumber) > Number(numberOfNodes)) {
+			console.log('this number that you chois is invalid');
+		} else {
+			const selectedIndices = new Set(); // To keep track of selected indices
+			for (let i = 0; i < clusterHeadsNumber; i++) {
+				let randomClusterHeads;
+				do {
+					randomClusterHeads = Math.floor(
+						Math.random() * numberOfNodes
+					);
+				} while (selectedIndices.has(randomClusterHeads));
+				selectedIndices.add(randomClusterHeads);
+				nodes[randomClusterHeads].isClusterHead = true;
+				nodes[randomClusterHeads].numberIsNotCluster = 0;
+				clusterHeadsList.push(nodes[randomClusterHeads]);
+			}
+		}
 	} else {
+		const wasClusterHeade = [];
+		nodes.forEach((node) => {
+			if (node.isClusterHead) {
+				wasClusterHeade.push(node.data.id);
+				node.isClusterHead = false;
+			}
+			node.distanceFromClusterHead = null;
+			node.isClusterHead = false;
+			node.hasClusterHead = false;
+			node.clusterhead = null;
+		});
 		const selectedIndices = new Set(); // To keep track of selected indices
 		for (let i = 0; i < clusterHeadsNumber; i++) {
 			let randomClusterHeads;
 			do {
 				randomClusterHeads = Math.floor(Math.random() * numberOfNodes);
-			} while (selectedIndices.has(randomClusterHeads));
+			} while (
+				selectedIndices.has(randomClusterHeads) &&
+				wasClusterHeade.includes(nodes[randomClusterHeads].data.id)
+			);
 			selectedIndices.add(randomClusterHeads);
 			nodes[randomClusterHeads].isClusterHead = true;
 			nodes[randomClusterHeads].numberIsNotCluster = 0;
