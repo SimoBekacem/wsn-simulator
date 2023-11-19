@@ -15,10 +15,6 @@ export default function CreatingNetworkForm() {
 		communicationRange: 0,
 		clusterHeadsNumber: 0,
 	});
-	const [info, setinfo] = useState({
-		communicationRange: 0,
-		clusterHeadsNumber: 0,
-	});
 
 	useEffect(() => {
 		dispatch(
@@ -31,24 +27,18 @@ export default function CreatingNetworkForm() {
 	const hundleChangeNumberOfNodes = (event) => {
 		setnumberOfNodes(event.target.value);
 	};
-	//todo: here ther is a problem you should to solve the decalage between the type and the affichage
 	const hundleChange = (event) => {
-		setvalues({
-			...values,
-			[event.target.name]: event.target.value,
-		});
+		setvalues((prevValue) => ({
+			...prevValue,
+			[event.target.name]: Number(event.target.value),
+		}));
 	};
 
 	const hundleClick = () => {
-		setinfo({
-			communicationRange: values.communicationRange,
-			clusterHeadsNumber: values.clusterHeadsNumber,
-		});
-
 		dispatch(
 			generateClusterHeadsAndLinksRedux({
-				sensorCommunicationRange: info.communicationRange,
-				clusterHeadsNumber: info.clusterHeadsNumber,
+				sensorCommunicationRange: values.communicationRange,
+				clusterHeadsNumber: values.clusterHeadsNumber,
 				formula: 0,
 			})
 		);
@@ -56,8 +46,8 @@ export default function CreatingNetworkForm() {
 	const hundleClick1 = () => {
 		dispatch(
 			relectionClusterHeadsAndLinksRedux({
-				sensorCommunicationRange: info.communicationRange,
-				clusterHeadsNumber: info.clusterHeadsNumber,
+				sensorCommunicationRange: values.communicationRange,
+				clusterHeadsNumber: values.clusterHeadsNumber,
 				formula: 0,
 			})
 		);
@@ -82,7 +72,7 @@ export default function CreatingNetworkForm() {
 				id='outlined-number'
 				label='Communication Radius'
 				type='number'
-				defaultValue={info.communicationRange}
+				defaultValue={values.communicationRange}
 				onChange={(event) => {
 					hundleChange(event);
 				}}
@@ -99,7 +89,7 @@ export default function CreatingNetworkForm() {
 					hundleChange(event);
 				}}
 				name='clusterHeadsNumber'
-				defaultValue={info.clusterHeadsNumber}
+				defaultValue={values.clusterHeadsNumber}
 				InputLabelProps={{
 					shrink: true,
 				}}

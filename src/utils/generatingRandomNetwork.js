@@ -60,6 +60,7 @@ function generateClusterHeadsAndLinks(
 		}
 	} else {
 		const wasClusterHeade = [];
+		const turnedOnNodes = [];
 		nodes.forEach((node) => {
 			if (node.isClusterHead) {
 				wasClusterHeade.push(node.data.id);
@@ -76,7 +77,6 @@ function generateClusterHeadsAndLinks(
 			do {
 				randomClusterHeads = Math.floor(Math.random() * numberOfNodes);
 			} while (
-				nodes[randomClusterHeads].battrieLife >= 35 &&
 				selectedIndices.has(randomClusterHeads) &&
 				wasClusterHeade.includes(nodes[randomClusterHeads].data.id)
 			);
@@ -113,6 +113,8 @@ function generateClusterHeadsAndLinks(
 				nodes[i].distanceFromClusterHead = distance;
 				nodes[i].clusterhead = targetNode.data.id;
 			}
+			sourceNode.numberIsNotCluster++;
+			sourceNode.hasClusterHead = true;
 		}
 	};
 
@@ -134,8 +136,6 @@ function generateClusterHeadsAndLinks(
 			}
 			if (sourceNode !== infoTargetSource.targetNode) {
 				creatingLink(sourceNode, infoTargetSource.targetNode, i);
-				sourceNode.numberIsNotCluster++;
-				sourceNode.hasClusterHead = true;
 			}
 		}
 	}
@@ -178,10 +178,13 @@ function decresingBattrieLife(nodes) {
 		if (node.battrieLife >= 35) {
 			node.isClusterHead
 				? (node.battrieLife -= 25)
-				: (node.battrieLife -= 15);
+				: node.hasClusterHead
+				? (node.battrieLife -= 15)
+				: (node.battrieLife -= 0);
 		} else {
 			node.battrieLife = 0;
 		}
+		return node;
 	});
 	return nodes;
 }
