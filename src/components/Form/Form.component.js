@@ -19,8 +19,6 @@ export default function Form() {
 			<Root>
 				<Divider>Creating The Network</Divider>
 				<CreatingNetworkForm />
-				<Divider>Battrie Informations</Divider>
-				<BattrieForm />
 			</Root>
 		</Stack>
 	);

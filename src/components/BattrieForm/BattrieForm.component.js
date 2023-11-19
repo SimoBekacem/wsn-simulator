@@ -1,73 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { Stack, TextField, Button } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
-// import { changeBattrieLife } from '../../redux/slices/network.reducer';
+export default function BasicSelect() {
+	const [age, setAge] = React.useState('');
 
-export default function BattrieForm() {
-	const dispatch = useDispatch();
-	const [values, setvalues] = useState({
-		P: 0.2,
-		r: 0.1,
-	});
-
-	const [info, setinfo] = useState({
-		P: 0.2,
-		r: 0.1,
-	});
-
-	// useEffect(() => {
-	// 	dispatch(
-	// 		changeBattrieLife({
-	// 			P: info.P,
-	// 			r: info.r,
-	// 		})
-	// 	);
-	// });
-	const hundleChange = (event) => {
-		setvalues({
-			...values,
-			[event.target.name]: event.target.value,
-		});
+	const handleChange = (event) => {
+		setAge(event.target.value);
 	};
 
-	const hundleClick = () => {
-		setinfo({
-			P: values.P,
-			r: values.r,
-		});
-	};
 	return (
-		<Stack spacing={2}>
-			<TextField
-				id='outlined-number'
-				label='probabilité de retransmette'
-				type='number'
-				defaultValue={info.P}
-				onChange={(event) => {
-					hundleChange(event);
-				}}
-				name='P'
-				InputLabelProps={{
-					shrink: true,
-				}}
-			/>
-			<TextField
-				id='outlined-number'
-				label='taux de perte'
-				type='number'
-				defaultValue={info.r}
-				onChange={(event) => {
-					hundleChange(event);
-				}}
-				name='r'
-				InputLabelProps={{
-					shrink: true,
-				}}
-			/>
-			<Button variant='contained' onClick={hundleClick}>
-				Submit
-			</Button>
-		</Stack>
+		<Box sx={{ minWidth: 150 }}>
+			<FormControl fullWidth>
+				<InputLabel id='demo-simple-select-label'>Formule</InputLabel>
+				<Select
+					labelId='demo-simple-select-label'
+					id='demo-simple-select'
+					value={age}
+					label='Age'
+					onChange={handleChange}
+				>
+					<MenuItem value={10}>
+						<img
+							src={require('../../assets/Screenshot 2023-11-19 at 12.01.17.png')}
+							width={'300rem'}
+						/>
+					</MenuItem>
+					<MenuItem value={20}>
+						<img
+							src={require('../../assets/Screenshot 2023-11-19 at 12.01.22.png')}
+							width={'300rem'}
+						/>
+					</MenuItem>
+					<MenuItem value={30}>
+						<img
+							src={require('../../assets/Screenshot 2023-11-19 at 12.01.29.png')}
+							width={'300rem'}
+						/>
+					</MenuItem>
+				</Select>
+			</FormControl>
+		</Box>
 	);
 }

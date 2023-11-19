@@ -30,7 +30,7 @@ export default function Header() {
 							color='inherit'
 							component='div'
 						>
-							Bah-3
+							BahWSN-3
 						</Typography>
 						<Typography
 							variant='h4'

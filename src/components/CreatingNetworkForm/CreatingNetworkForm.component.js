@@ -7,6 +7,8 @@ import {
 	generateClusterHeadsAndLinksRedux,
 } from '../../redux/slices/network.reducer';
 
+import BasicSelect from '../BattrieForm/BattrieForm.component';
+
 export default function CreatingNetworkForm() {
 	const dispatch = useDispatch();
 	const [numberOfNodes, setnumberOfNodes] = useState(40);
@@ -84,6 +86,7 @@ export default function CreatingNetworkForm() {
 					shrink: true,
 				}}
 			/>
+			<BasicSelect />
 			<Button variant='contained' onClick={hundleClick}>
 				Create The Network
 			</Button>
