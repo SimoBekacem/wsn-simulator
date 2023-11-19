@@ -1,16 +1,20 @@
-import * as React from 'react';
-
-import { useSelector } from 'react-redux';
-
-import { Stack, Typography, Toolbar, Box, AppBar } from '@mui/material';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Stack, Typography, Toolbar, Box, AppBar, Button } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseCircleIcon from '@mui/icons-material/PauseCircle';
-import { play_pouseStyle } from './Header.style';
+import { relectionClusterHeadsAndLinksRedux } from '../../redux/slices/network.reducer';
 
 export default function Header() {
 	const [isPlay, setisPlay] = React.useState(false);
 	const rounds = useSelector((state) => state.network.value).round;
-	console.log(rounds);
+	const dispatch = useDispatch();
+	const hundleClick = () => {
+		dispatch(
+			relectionClusterHeadsAndLinksRedux({
+				formula: 0,
+			})
+		);
+	};
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position='static'>
@@ -35,17 +39,14 @@ export default function Header() {
 						>
 							{`Round ${rounds}`}
 						</Typography>
-						<Box
-							onClick={() => {
-								setisPlay(!isPlay);
-							}}
+						<Button
+							variant='contained'
+							onClick={hundleClick}
+							color='secondary'
+							endIcon={<PlayArrowIcon />}
 						>
-							{isPlay ? (
-								<PauseCircleIcon sx={play_pouseStyle} />
-							) : (
-								<PlayArrowIcon sx={play_pouseStyle} />
-							)}
-						</Box>
+							Move To Next Round
+						</Button>
 					</Stack>
 				</Toolbar>
 			</AppBar>

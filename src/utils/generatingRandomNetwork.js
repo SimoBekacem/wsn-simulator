@@ -29,13 +29,13 @@ function generateClusterHeadsAndLinks(
 	clusterHeadsPorsentag,
 	isRelection
 ) {
+	let isFinish;
 	let numberOfNodes = 0;
 	for (let i = 0; i < nodes.length; i++) {
 		if (nodes[i].battrieLife > 0) {
 			numberOfNodes++;
 		}
 	}
-	console.log(numberOfNodes);
 	const clusterHeadsNumber = Math.floor(
 		(clusterHeadsPorsentag * numberOfNodes) / 100
 	);
@@ -68,6 +68,7 @@ function generateClusterHeadsAndLinks(
 				canBeClusterHeade.push(i);
 			}
 		}
+		isFinish = canBeClusterHeade.length ? false : true;
 
 		// Reset properties of each node
 		nodes.forEach((node) => {
@@ -104,7 +105,7 @@ function generateClusterHeadsAndLinks(
 			clusterHeadsList.push(nodes[randomIndex]);
 		}
 	}
-
+	clusterHeadsList.forEach((cluster) => console.log(cluster));
 	// this function calculate the distance between two nodes
 	const calculateDistanc = (sourceNode, targetNode) => {
 		//: here we have the cordonnations of each point and we calculate the distance between those 2 points
@@ -117,6 +118,7 @@ function generateClusterHeadsAndLinks(
 	//here we creat the edges or the links between the nodes;
 	const creatingLink = (sourceNode, targetNode, i) => {
 		const distance = calculateDistanc(sourceNode, targetNode).distance;
+
 		if (distance <= sensorCommunicationRange) {
 			const edge = {
 				data: {
@@ -188,6 +190,7 @@ function generateClusterHeadsAndLinks(
 		nodes,
 		edges,
 		stylesheetNodes,
+		isFinish,
 	};
 }
 
