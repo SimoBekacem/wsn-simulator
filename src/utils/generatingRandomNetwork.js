@@ -16,6 +16,7 @@ function generateNodes(numberOfNodes) {
 			battrieLife: 100,
 			numberIsNotCluster: 0,
 			clusterhead: null,
+			canBeCluster: true,
 		};
 		nodes.push(node);
 	}
@@ -59,31 +60,48 @@ function generateClusterHeadsAndLinks(
 			}
 		}
 	} else {
-		const wasClusterHeade = [];
-		const turnedOnNodes = [];
-		nodes.forEach((node) => {
-			if (node.isClusterHead) {
-				wasClusterHeade.push(node.data.id);
-				node.isClusterHead = false;
+		const canBeClusterHeade = [];
+
+		// Populate canBeClusterHeade with valid indices
+		for (let i = 0; i < nodes.length; i++) {
+			if (!nodes[i].isClusterHead && nodes[i].battrieLife > 0) {
+				canBeClusterHeade.push(i);
 			}
-			node.distanceFromClusterHead = null;
+		}
+
+		// Reset properties of each node
+		nodes.forEach((node) => {
 			node.isClusterHead = false;
+			node.distanceFromClusterHead = null;
 			node.hasClusterHead = false;
 			node.clusterhead = null;
 		});
+
 		const selectedIndices = new Set(); // To keep track of selected indices
-		for (let i = 0; i < clusterHeadsNumber; i++) {
-			let randomClusterHeads;
-			do {
-				randomClusterHeads = Math.floor(Math.random() * numberOfNodes);
-			} while (
-				selectedIndices.has(randomClusterHeads) &&
-				wasClusterHeade.includes(nodes[randomClusterHeads].data.id)
+
+		// Select random cluster heads from canBeClusterHeade
+		for (
+			let i = 0;
+			i < clusterHeadsNumber && canBeClusterHeade.length > 0;
+			i++
+		) {
+			// Filter out nodes with battrieLife = 0
+			const validIndices = canBeClusterHeade.filter(
+				(index) => nodes[index].battrieLife > 0
 			);
-			selectedIndices.add(randomClusterHeads);
-			nodes[randomClusterHeads].isClusterHead = true;
-			nodes[randomClusterHeads].numberIsNotCluster = 0;
-			clusterHeadsList.push(nodes[randomClusterHeads]);
+
+			if (validIndices.length === 0) {
+				// No more valid nodes, break out of the loop
+				break;
+			}
+
+			const randomIndex =
+				validIndices[Math.floor(Math.random() * validIndices.length)];
+			selectedIndices.add(randomIndex);
+
+			nodes[randomIndex].isClusterHead = true;
+			nodes[randomIndex].numberIsNotCluster = 0;
+			clusterHeadsList.push(nodes[randomIndex]);
 		}
 	}
 
@@ -180,7 +198,7 @@ function decresingBattrieLife(nodes) {
 				? (node.battrieLife -= 25)
 				: node.hasClusterHead
 				? (node.battrieLife -= 15)
-				: (node.battrieLife -= 0);
+				: (node.battrieLife -= 5);
 		} else {
 			node.battrieLife = 0;
 		}
