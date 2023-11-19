@@ -17,6 +17,7 @@ function generateNodes(numberOfNodes) {
 			numberIsNotCluster: 0,
 			clusterhead: null,
 			canBeCluster: true,
+			battrieLevels: [],
 		};
 		nodes.push(node);
 	}
@@ -196,7 +197,8 @@ function generateClusterHeadsAndLinks(
 
 function decresingBattrieLife(nodes) {
 	nodes.map((node) => {
-		if (node.battrieLife >= 35) {
+		node.battrieLevels.push(node.battrieLife);
+		if (node.battrieLife >= 25) {
 			node.isClusterHead
 				? (node.battrieLife -= 25)
 				: node.hasClusterHead

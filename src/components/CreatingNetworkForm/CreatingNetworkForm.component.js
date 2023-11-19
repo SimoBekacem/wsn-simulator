@@ -11,6 +11,7 @@ import BasicSelect from '../BattrieForm/BattrieForm.component';
 
 export default function CreatingNetworkForm() {
 	const dispatch = useDispatch();
+	const [disabled, setdisabled] = useState(false);
 	const [numberOfNodes, setnumberOfNodes] = useState(40);
 	const [values, setvalues] = useState({
 		communicationRange: 0,
@@ -43,6 +44,7 @@ export default function CreatingNetworkForm() {
 				formula: 0,
 			})
 		);
+		setdisabled(true);
 	};
 
 	return (
@@ -75,7 +77,7 @@ export default function CreatingNetworkForm() {
 			/>
 			<TextField
 				id='outlined-number'
-				label='Cluster Heades Number'
+				label='Cluster Head Psentage (In %)'
 				type='number'
 				onChange={(event) => {
 					hundleChange(event);
@@ -87,7 +89,11 @@ export default function CreatingNetworkForm() {
 				}}
 			/>
 			<BasicSelect />
-			<Button variant='contained' onClick={hundleClick}>
+			<Button
+				variant='contained'
+				onClick={hundleClick}
+				disabled={disabled}
+			>
 				Create The Network
 			</Button>
 		</Stack>
